@@ -1,8 +1,8 @@
 <template>
-  <div className='books'>
+  <div class='books' v-if="!loading && result?.listBooks.data">
     <Book
       :key="book.id" 
-      v-for="book in books"
+      v-for="book in result?.listBooks.data"
       :title="book.title"
       :image="book.image"
       :authors="book.authors"
@@ -11,19 +11,79 @@
       :id="book.id"
     />
   </div>
+  <div v-else class='center'>
+    <div v-if="loading">Loading...</div>
+    <p v-else-if="error">
+      UNABLE TO FETCH DATA
+    </p>
+  </div>
+
+  <div class='buttons' v-if="!loading">
+    <button 
+      :disabled="page === 0 && true"
+      :style="{backgroundColor: `${page === 0 ? 'gray' : '#6796ec'}`}"
+      @click="page--">Prev</button>
+    <button 
+      :disabled="!result?.listBooks.meta?.hasMoreItems && true"
+      :style="{backgroundColor: `${result?.listBooks.meta?.hasMoreItems ? '#6796ec' : 'gray'}`}"
+      @click="page++">Next</button>
+  </div>
 </template>
 
 <script>
 import Book from './components/Book';
 import { Allbooks } from './data.js'; 
+import {ref, watch} from 'vue'
+import gql from 'graphql-tag'
+import { useQuery } from '@vue/apollo-composable'
+
+const LIST_BOOKS = gql`
+  query GetBooks ($limit: Int, $after: String){
+    listBooks (limit: $limit, after: $after){
+      data {
+        id
+        authors
+        image
+        publishDate
+        publisher
+        title
+      }
+      meta {
+        cursor
+        hasMoreItems
+      }
+    }
+  }
+`
 
 export default {
   name: 'App',
   setup() {
-    const books = Allbooks  
+    const cursors = ref([null])
+    const page = ref(0)
+    const variables = ref({
+      limit: 10,
+      after: null
+    })
+
+    const {result, loading, error } = useQuery(LIST_BOOKS, variables)
+    
+    watch(result, (result) => {
+      const pointer = result?.listBooks?.meta?.cursor
+      if(!loading.value && pointer !== cursors.value[page.value]){
+        cursors.value = [...cursors.value, pointer]
+      }
+    })
+
+    watch(page, (page) => {
+      variables.value.after = cursors.value[page]
+    })
 
     return {
-      books
+      result,
+      loading,
+      error,
+      page
     }
   },
   components: {

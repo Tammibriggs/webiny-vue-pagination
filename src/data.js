@@ -44,7 +44,7 @@ export const Allbooks = [
     title: "Learning React",
   },
   {
-    authors: ['Bonnie Eisenman'],
+    authors: ['Learning React Eisenman'],
     description: "Get a practical introduction to React Native, the JavaScript framework for writing and deploying fully featured mobile apps that look and feel native. With this hands-on guide, you’ll learn how to build applications that target iOS, Android, and other mobile platforms instead of browsers. You’ll also discover how to access platform features such as the camera, user location, and local storage. With code examples and step-by-step instructions, author Bonnie Eisenman shows web developers and frontend engineers how to build and style interfaces, use mobile components, and debug and deploy apps. Along the way, you’ll build several increasingly sophisticated sample apps with React Native before putting everything together at the end. Learn how React Native provides an interface to native UI components Examine how the framework uses native components analogous to HTML elements Create and style your own React Native components and applications Install modules for APIs and features not supported by the framework Get tools for debugging your code, and for handling issues outside of JavaScript Put it all together with the Zebreto effective-memorization flashcard app Deploy apps to the iOS App Store and Google’s Play Store",
     id: "274fCwAAQBAJ",
     image: "http://books.google.com/books/content?id=274fCwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
